@@ -1,7 +1,7 @@
-Party,Pres. Cand.,VP Cand.,,
-D,Barack Obama,Joe Biden,,
-R,John McCain,Sarah Palin,,
-State,Electoral votes,Obama / Biden,McCain / Palin,Total Votes
+Party,Pres. Cand.,VP Cand.
+D,Barack Obama,Joe Biden
+R,John McCain,Sarah Palin
+State,Electoral votes,Obama,McCain,Total Votes
 AL,9,813479,1266546,2099819
 AK,3,123594,193841,326197
 AZ,10,1034707,1230111,2293475
