@@ -2,7 +2,7 @@ package gui;
 
 import app.MultimediaApplication;
 
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
 /**
  *
@@ -13,13 +13,17 @@ import javax.swing.SwingUtilities;
  */
 public class FinalProjectApplication extends MultimediaApplication
 {
+  static private FinalProjectApp decorated;
+  static private FinalProjectApplication instance;
+
   public FinalProjectApplication(String[] args, int width, int height)
   {
-    super(args, new FinalProjectApp(), width, height);
+    super(args, decorated = new FinalProjectApp(), width, height);
   }
 
   public static void main(String[] args) throws Exception
   {
-    SwingUtilities.invokeAndWait(new FinalProjectApplication(args, 600, 400));
+    SwingUtilities.invokeAndWait(instance = new FinalProjectApplication(args, 600, 400));
+    instance.mainWindow.setJMenuBar(decorated.getJMenuBar());
   }
 }
