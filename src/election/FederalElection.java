@@ -13,6 +13,7 @@ public class FederalElection
 {
   private ArrayList<Candidate> cands;
   private ArrayList<StateElection> states;
+  private String title;
 
   public FederalElection()
   {
@@ -52,5 +53,27 @@ public class FederalElection
   public ArrayList<StateElection> getStates()
   {
     return states;
+  }
+
+  public String getTitle() {
+	return title;
+  }
+
+  public void setTitle(String title) {
+	this.title = title;
+  }
+
+  @Override
+  public String toString()
+  {
+	  String result = title + ":\n";
+
+	  for (Candidate c : cands)
+	  {
+		  result += c.toString() + "\n";
+	  }
+
+	  result += states.size() + " states";
+	  return result;
   }
 }

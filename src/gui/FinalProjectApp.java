@@ -27,8 +27,8 @@ public class FinalProjectApp extends AbstractMultimediaApp
   public void init()
   {
     FederalElection election;
+    JTextArea textArea;
     JPanel contentPane;
-    JLabel[] labels;
     ResourceFinder rf;
 
     contentPane = (JPanel)rootPaneContainer.getContentPane();
@@ -42,13 +42,9 @@ public class FinalProjectApp extends AbstractMultimediaApp
           DATA_PATH + "2008" + File.separator + "president.csv"));
       election.countVotes();
 
-      labels = new JLabel[election.getCandidates().size()];
+      textArea = new JTextArea(election.toString());
 
-      for (int i = 0; i < election.getCandidates().size(); i++)
-      {
-        labels[i] = new JLabel(election.getCandidates().get(i).toString());
-        contentPane.add(labels[i]);
-      }
+      contentPane.add(textArea);
 
       contentPane.setVisible(true);
     }

@@ -68,7 +68,7 @@ public class StateElection
 
     split = line.split(",");
     if (split.length != 3 + candidates.size())
-      throw new IllegalArgumentException("malformed vote line");
+      throw new IllegalArgumentException("malformed vote line: " + line);
 
     try
     {

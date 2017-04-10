@@ -1,8 +1,5 @@
 package election;
 
-import java.util.NoSuchElementException;
-import java.util.StringTokenizer;
-
 /**
  *
  *
@@ -75,19 +72,16 @@ public class Candidate
 
   public static Candidate parseCandidate(String line)
   {
-    StringTokenizer st;
+	String[] split;
+	int i = 0;
 
-    st = new StringTokenizer(line, ",");
+    split = line.split(",");
 
-    try
-    {
-      return new Candidate(Party.fromAbbreviation(st.nextToken()),
-          st.nextToken(), st.nextToken());
-    }
-    catch (NoSuchElementException e)
-    {
+    if (split.length != 3)
       throw new IllegalArgumentException("malformed candidate entry");
-    }
+
+    return new Candidate(Party.fromAbbreviation(split[i++]),
+	    split[i++], split[i++]);
   }
 
   /**

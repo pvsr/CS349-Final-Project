@@ -27,6 +27,7 @@ public class ElectionFactory
     result = new FederalElection();
     reader = new BufferedReader(new InputStreamReader(in));
 
+    result.setTitle(reader.readLine());
     // skip header
     reader.readLine();
     line = reader.readLine();
