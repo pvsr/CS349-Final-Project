@@ -17,6 +17,7 @@ public class ElectionFactory
   public static FederalElection createFederalElection(InputStream in) throws IOException
   {
     BufferedReader reader;
+    InputStreamReader isr;
     FederalElection result;
     String line;
     String[] split;
@@ -25,7 +26,8 @@ public class ElectionFactory
       throw new IOException("could not find input file!");
 
     result = new FederalElection();
-    reader = new BufferedReader(new InputStreamReader(in));
+    isr = new InputStreamReader(in);
+    reader = new BufferedReader(isr);
 
     result.setTitle(reader.readLine());
     // skip header
@@ -56,6 +58,10 @@ public class ElectionFactory
     }
 
     result.setTotalVotes(Integer.parseInt(split[i++]));
+
+    reader.close();
+    isr.close();
+    in.close();
 
     return result;
   }

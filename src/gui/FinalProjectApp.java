@@ -16,8 +16,12 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 /**
@@ -30,11 +34,22 @@ import javax.swing.*;
 public class FinalProjectApp extends AbstractMultimediaApp
     implements ActionListener
 {
-  private static final String DATA_PATH = File.separator + "data"
-      + File.separator;
+  private static final String DATA_PATH = "data" + File.separator;
+  private static JFileChooser fc = new JFileChooser();
 
-  private FederalElection election;
+  private ArrayList<FederalElection> elections;
   private ResourceFinder rf;
+  private JTabbedPane tabbedPane;
+
+  private void addNewElection(InputStream in, File dir) throws IOException
+  {
+    FederalElection election;
+
+    election = ElectionFactory.createFederalElection(in);
+    election.countVotes();
+    tabbedPane.addTab(election.getTitle(), buildResultTab(election, dir));
+    elections.add(election);
+  }
 
   public JMenuBar buildJMenuBar()
   {
@@ -59,7 +74,8 @@ public class FinalProjectApp extends AbstractMultimediaApp
     return menuBar;
   }
 
-  private JPanel buildResultTab()
+  private JPanel buildResultTab(FederalElection election, File dir)
+      throws IOException
   {
     Candidate cand;
     Content c;
@@ -115,8 +131,18 @@ public class FinalProjectApp extends AbstractMultimediaApp
       electoral.setBounds(x + 90 - size.width / 2, y + 280, size.width,
           size.height);
 
-      c = cf.createContent(DATA_PATH + "2008" + File.separator + i + ".jpg");
-      c.setLocation(i % 2 == 0 ? 130 : 490, 100);
+      // TODO placeholder images
+      if (dir.isAbsolute())
+      {
+        c = cf.createContent(ImageIO.read(new File(dir, i + ".jpg")));
+      }
+      else
+      {
+        c = cf.createContent(
+            File.separator + dir.toString() + File.separator + i + ".jpg");
+      }
+
+      c.setLocation(x, 100);
       visualization.add(c);
     }
 
@@ -130,7 +156,6 @@ public class FinalProjectApp extends AbstractMultimediaApp
   {
     Container parent;
     JPanel contentPane;
-    JTabbedPane tabbedPane;
 
     contentPane = (JPanel) rootPaneContainer.getContentPane();
     contentPane.setLayout(new BorderLayout());
@@ -140,11 +165,16 @@ public class FinalProjectApp extends AbstractMultimediaApp
 
     rf = ResourceFinder.createInstance();
 
+    elections = new ArrayList<FederalElection>();
+
+    // terrible hack to add a menubar
     parent = contentPane;
     do
     {
       parent = parent.getParent();
-    } while (!(parent instanceof JApplet || parent instanceof JFrame || parent == null));
+    }
+    while (!(parent instanceof JApplet || parent instanceof JFrame
+        || parent == null));
 
     if (parent instanceof JApplet)
     {
@@ -157,22 +187,18 @@ public class FinalProjectApp extends AbstractMultimediaApp
 
     try
     {
-      election = ElectionFactory.createFederalElection(rf.findInputStream(
-          DATA_PATH + "2008" + File.separator + "president.csv"));
+      addNewElection(
+          rf.findInputStream(File.separator + DATA_PATH + "2008"
+              + File.separator + "president.csv"),
+          new File(DATA_PATH + "2008"));
     }
     catch (IOException e)
     {
-      // silence variable initialization warning
-      election = null;
-      e.printStackTrace();
       JOptionPane.showMessageDialog(contentPane, e.toString(), "Error!",
           JOptionPane.ERROR_MESSAGE);
       destroy();
     }
 
-    election.countVotes();
-
-    tabbedPane.addTab("Result Overview", buildResultTab());
     tabbedPane.setSize(tabbedPane.getPreferredSize());
     contentPane.setVisible(true);
   }
@@ -192,12 +218,30 @@ public class FinalProjectApp extends AbstractMultimediaApp
   @Override
   public void actionPerformed(ActionEvent e)
   {
+    JPanel contentPane = (JPanel) rootPaneContainer.getContentPane();
     if (e.getActionCommand().equals("Load File"))
     {
+      File file;
+      int returnValue = fc.showOpenDialog(contentPane);
+      if (returnValue == JFileChooser.APPROVE_OPTION)
+      {
+        file = fc.getSelectedFile();
+
+        try
+        {
+          addNewElection(new FileInputStream(file), file.getParentFile());
+        }
+        catch (IOException exception)
+        {
+          // TODO execute this on the event dispatch thread
+          JOptionPane.showMessageDialog(contentPane, exception.toString(),
+              "Error!", JOptionPane.ERROR_MESSAGE);
+        }
+      }
     }
     else if (e.getActionCommand().equals("Copyright Information"))
     {
-      JOptionPane.showMessageDialog(rootPaneContainer.getContentPane(),
+      JOptionPane.showMessageDialog(contentPane,
           "<html><body><p style='width: 375px;'>All datasets provided with "
               + "this application are derived from Creative Commons "
               + "Attribution-Share-Alike Licensed content, including content "
