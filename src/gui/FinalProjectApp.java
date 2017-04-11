@@ -11,10 +11,9 @@ import visual.statik.sampled.Content;
 import visual.statik.sampled.ContentFactory;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -28,6 +27,7 @@ import javax.swing.*;
  *
  */
 public class FinalProjectApp extends AbstractMultimediaApp
+    implements ActionListener
 {
   private static final String DATA_PATH = File.separator + "data"
       + File.separator;
@@ -38,14 +38,23 @@ public class FinalProjectApp extends AbstractMultimediaApp
   public JMenuBar getJMenuBar()
   {
     JMenuBar menuBar;
-    JMenu menu;
-    JMenuItem menuItem;
+    JMenu file, help;
+    JMenuItem load, copyright;
 
     menuBar = new JMenuBar();
-    menu = new JMenu("test");
-    menuBar.add(menu);
-    menuItem = new JMenuItem("test item");
-    menu.add(menuItem);
+
+    file = new JMenu("File");
+    menuBar.add(file);
+    load = new JMenuItem("Load File");
+    load.addActionListener(this);
+    file.add(load);
+
+    help = new JMenu("Help");
+    menuBar.add(help);
+    copyright = new JMenuItem("Copyright Information");
+    copyright.addActionListener(this);
+    help.add(copyright);
+
     return menuBar;
   }
 
@@ -55,7 +64,6 @@ public class FinalProjectApp extends AbstractMultimediaApp
     Content c;
     ContentFactory cf;
     Dimension size;
-    Insets insets;
     int numCands, x, y;
     JPanel result;
     Visualization visualization;
@@ -93,8 +101,8 @@ public class FinalProjectApp extends AbstractMultimediaApp
       popular.setStringPainted(true);
       result.add(popular);
       size = popular.getPreferredSize();
-      popular.setBounds(x + 90 - size.width / 2, y + 260, size.width, size.height);
-
+      popular.setBounds(x + 90 - size.width / 2, y + 260, size.width,
+          size.height);
 
       electoral = new JProgressBar(0, election.getTotalElectoralVotes());
       electoral.setForeground(cand.getParty().getColor());
@@ -103,7 +111,8 @@ public class FinalProjectApp extends AbstractMultimediaApp
       electoral.setStringPainted(true);
       result.add(electoral);
       size = electoral.getPreferredSize();
-      electoral.setBounds(x + 90 - size.width / 2, y + 280, size.width, size.height);
+      electoral.setBounds(x + 90 - size.width / 2, y + 280, size.width,
+          size.height);
 
       c = cf.createContent(DATA_PATH + "2008" + File.separator + i + ".jpg");
       c.setLocation(i % 2 == 0 ? 130 : 490, 100);
@@ -111,8 +120,6 @@ public class FinalProjectApp extends AbstractMultimediaApp
     }
 
     result.add(view);
-    insets = result.getInsets();
-    result.setSize(795, 552);
     result.repaint();
     return result;
   }
@@ -124,10 +131,10 @@ public class FinalProjectApp extends AbstractMultimediaApp
     JTabbedPane tabbedPane;
 
     contentPane = (JPanel) rootPaneContainer.getContentPane();
-    contentPane.setLayout(null);
+    contentPane.setLayout(new BorderLayout());
 
     tabbedPane = new JTabbedPane();
-    contentPane.add(tabbedPane);
+    contentPane.add(tabbedPane, BorderLayout.CENTER);
 
     rf = ResourceFinder.createInstance();
 
@@ -159,5 +166,32 @@ public class FinalProjectApp extends AbstractMultimediaApp
   public void destroy()
   {
     System.exit(1);
+  }
+
+  /*
+   * (non-Javadoc)
+   *
+   * @see
+   * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+   */
+  @Override
+  public void actionPerformed(ActionEvent e)
+  {
+    if (e.getActionCommand().equals("Load File"))
+    {
+    }
+    else if (e.getActionCommand().equals("Copyright Information"))
+    {
+      JOptionPane.showMessageDialog(rootPaneContainer.getContentPane(),
+          "<html><body><p style='width: 375px;'>All datasets provided with "
+              + "this application are derived from Creative Commons "
+              + "Attribution-Share-Alike Licensed content, including content "
+              + "from Wikipedia and the National Archives and Records "
+              + "Administration. For more information, see data"
+              + File.separator + "copyright.md in your .jar file or on "
+              + "the project's website at https://github.com/pvsr/"
+              + "CS349-Final-Project.</p></body></html>",
+          "Copyright Information", JOptionPane.INFORMATION_MESSAGE);
+    }
   }
 }
