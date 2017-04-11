@@ -46,12 +46,16 @@ public class ElectionFactory
       line = reader.readLine();
     }
 
+    int i = 1;
     split = line.split(",");
+    result.setTotalElectoralVotes(Integer.parseInt(split[i++]));
 
-    for (int i = 0; i < result.getCandidates().size(); i++)
+    for (int j = 0; j < result.getCandidates().size(); j++)
     {
-      result.getCandidates().get(i).setVotes(Integer.parseInt(split[i + 2]));
+      result.getCandidates().get(j).setVotes(Integer.parseInt(split[i++]));
     }
+
+    result.setTotalVotes(Integer.parseInt(split[i++]));
 
     return result;
   }

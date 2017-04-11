@@ -14,6 +14,8 @@ public class FederalElection
   private ArrayList<Candidate> cands;
   private ArrayList<StateElection> states;
   private String title;
+  private int totalVotes;
+  private int totalElectoralVotes;
 
   public FederalElection()
   {
@@ -59,8 +61,40 @@ public class FederalElection
 	return title;
   }
 
+  /**
+   * @return the number of electoral votes
+   */
+  public int getTotalElectoralVotes()
+  {
+    return totalElectoralVotes;
+  }
+
+  /**
+   * @return the number of votes
+   */
+  public int getTotalVotes()
+  {
+    return totalVotes;
+  }
+
   public void setTitle(String title) {
 	this.title = title;
+  }
+
+  /**
+   * @param totalElectoralVotes the number of electoral votes
+   */
+  public void setTotalElectoralVotes(int totalElectoralVotes)
+  {
+    this.totalElectoralVotes = totalElectoralVotes;
+  }
+
+  /**
+   * @param totalVotes the number of votes
+   */
+  public void setTotalVotes(int totalVotes)
+  {
+    this.totalVotes = totalVotes;
   }
 
   @Override

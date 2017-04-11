@@ -1,6 +1,5 @@
 package gui;
 
-import app.MultimediaApp;
 import app.MultimediaApplet;
 
 /**
@@ -12,11 +11,11 @@ import app.MultimediaApplet;
  */
 public class FinalProjectApplet extends MultimediaApplet
 {
-  static private FinalProjectApp decorated;
-  
+  static private FinalProjectApp app;
+
   public FinalProjectApplet()
   {
-    super(decorated = new FinalProjectApp());
-    setJMenuBar(decorated.getJMenuBar());
+    super(app = new FinalProjectApp());
+    setJMenuBar(app.getJMenuBar());
   }
 }
