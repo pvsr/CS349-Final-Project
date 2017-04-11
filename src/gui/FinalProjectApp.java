@@ -11,6 +11,7 @@ import visual.statik.sampled.Content;
 import visual.statik.sampled.ContentFactory;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,7 +36,7 @@ public class FinalProjectApp extends AbstractMultimediaApp
   private FederalElection election;
   private ResourceFinder rf;
 
-  public JMenuBar getJMenuBar()
+  public JMenuBar buildJMenuBar()
   {
     JMenuBar menuBar;
     JMenu file, help;
@@ -127,6 +128,7 @@ public class FinalProjectApp extends AbstractMultimediaApp
   @Override
   public void init()
   {
+    Container parent;
     JPanel contentPane;
     JTabbedPane tabbedPane;
 
@@ -137,6 +139,21 @@ public class FinalProjectApp extends AbstractMultimediaApp
     contentPane.add(tabbedPane, BorderLayout.CENTER);
 
     rf = ResourceFinder.createInstance();
+
+    parent = contentPane;
+    do
+    {
+      parent = parent.getParent();
+    } while (!(parent instanceof JApplet || parent instanceof JFrame || parent == null));
+
+    if (parent instanceof JApplet)
+    {
+      ((JApplet) parent).setJMenuBar(buildJMenuBar());
+    }
+    else if (parent instanceof JFrame)
+    {
+      ((JFrame) parent).setJMenuBar(buildJMenuBar());
+    }
 
     try
     {
@@ -156,8 +173,6 @@ public class FinalProjectApp extends AbstractMultimediaApp
     election.countVotes();
 
     tabbedPane.addTab("Result Overview", buildResultTab());
-    JPanel a2 = buildResultTab();
-    tabbedPane.addTab("Result Overview2", a2);
     tabbedPane.setSize(tabbedPane.getPreferredSize());
     contentPane.setVisible(true);
   }

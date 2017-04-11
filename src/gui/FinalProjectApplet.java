@@ -11,11 +11,8 @@ import app.MultimediaApplet;
  */
 public class FinalProjectApplet extends MultimediaApplet
 {
-  static private FinalProjectApp app;
-
   public FinalProjectApplet()
   {
-    super(app = new FinalProjectApp());
-    setJMenuBar(app.getJMenuBar());
+    super(new FinalProjectApp());
   }
 }

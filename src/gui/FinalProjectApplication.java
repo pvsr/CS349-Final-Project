@@ -13,17 +13,13 @@ import javax.swing.*;
  */
 public class FinalProjectApplication extends MultimediaApplication
 {
-  static private FinalProjectApp app;
-  static private FinalProjectApplication instance;
-
   public FinalProjectApplication(String[] args, int width, int height)
   {
-    super(args, app = new FinalProjectApp(), width, height);
+    super(args, new FinalProjectApp(), width, height);
   }
 
   public static void main(String[] args) throws Exception
   {
-    SwingUtilities.invokeAndWait(instance = new FinalProjectApplication(args, 800, 600));
-    instance.mainWindow.setJMenuBar(app.getJMenuBar());
+    SwingUtilities.invokeAndWait(new FinalProjectApplication(args, 800, 600));
   }
 }
