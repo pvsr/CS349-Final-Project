@@ -35,7 +35,7 @@ public class FinalProjectApp extends AbstractMultimediaApp
     implements ActionListener
 {
   private static final String DATA_PATH = "data" + File.separator;
-  private static JFileChooser fc = new JFileChooser();
+  private static JFileChooser fc = null;
 
   private ArrayList<FederalElection> elections;
   private ResourceFinder rf;
@@ -218,6 +218,7 @@ public class FinalProjectApp extends AbstractMultimediaApp
   @Override
   public void actionPerformed(ActionEvent e)
   {
+    if (fc == null) fc = new JFileChooser();
     JPanel contentPane = (JPanel) rootPaneContainer.getContentPane();
     if (e.getActionCommand().equals("Load File"))
     {
