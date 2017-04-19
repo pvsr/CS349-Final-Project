@@ -1,19 +1,7 @@
 package gui;
 
-import app.AbstractMultimediaApp;
-import election.Candidate;
-import election.ElectionFactory;
-import election.FederalElection;
-import io.ResourceFinder;
-import visual.Visualization;
-import visual.VisualizationView;
-import visual.statik.sampled.Content;
-import visual.statik.sampled.ContentFactory;
-
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -22,8 +10,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.swing.JApplet;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+
+import app.AbstractMultimediaApp;
+import election.ElectionFactory;
+import election.FederalElection;
+import io.ResourceFinder;
 
 /**
  *
@@ -43,13 +43,15 @@ public class FinalProjectApp extends AbstractMultimediaApp
   private ResourceFinder rf;
   private JTabbedPane tabbedPane;
 
-  private void addNewElection(InputStream in, File dir) throws IOException
+  private void addNewElection(InputStream in, File dataDir) throws IOException
   {
     FederalElection election;
 
     election = ElectionFactory.createFederalElection(in);
-    election.countVotes();
-    tabbedPane.addTab(election.getTitle(), new ResultPanel(election, dir, rf));
+    tabbedPane.addTab(election.getTitle(),
+        new ResultPanel(election, dataDir, rf));
+    tabbedPane.add("Map", new MapPanel(election, RESOURCE_PATH, rf));
+
     elections.add(election);
   }
 
@@ -81,7 +83,6 @@ public class FinalProjectApp extends AbstractMultimediaApp
   {
     Container parent;
     JPanel contentPane;
-    MapPanel map;
 
     contentPane = (JPanel) rootPaneContainer.getContentPane();
     contentPane.setLayout(new BorderLayout());
@@ -90,7 +91,6 @@ public class FinalProjectApp extends AbstractMultimediaApp
     contentPane.add(tabbedPane, BorderLayout.CENTER);
 
     rf = ResourceFinder.createInstance();
-    map = new MapPanel(rf, RESOURCE_PATH);
 
     elections = new ArrayList<FederalElection>();
 
@@ -126,8 +126,6 @@ public class FinalProjectApp extends AbstractMultimediaApp
       destroy();
     }
 
-    tabbedPane.add("Map", new MapPanel(rf, RESOURCE_PATH));
-
     tabbedPane.setSize(tabbedPane.getPreferredSize());
     contentPane.setVisible(true);
   }
@@ -147,7 +145,8 @@ public class FinalProjectApp extends AbstractMultimediaApp
   @Override
   public void actionPerformed(ActionEvent e)
   {
-    if (fc == null) fc = new JFileChooser();
+    if (fc == null)
+      fc = new JFileChooser();
     JPanel contentPane = (JPanel) rootPaneContainer.getContentPane();
     if (e.getActionCommand().equals("Load File"))
     {

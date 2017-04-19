@@ -16,6 +16,7 @@ public class StateElection
   private int electoralVotes;
 
   private HashMap<Candidate, Integer> results;
+  private Candidate winner;
 
   /**
    * @param votes
@@ -36,18 +37,11 @@ public class StateElection
   }
 
   /**
-   * Assign the state's electoral votes
+   * @return the winner
    */
-  public void assignVotes()
+  public Candidate getWinner()
   {
-    HashMap.Entry<Candidate, Integer> max = null;
-
-    for (HashMap.Entry<Candidate, Integer> result : results.entrySet())
-    {
-      if (max == null || result.getValue() > max.getValue())
-        max = result;
-    }
-    max.getKey().addElectoralVotes(electoralVotes);
+    return winner;
   }
 
   /**
@@ -61,6 +55,7 @@ public class StateElection
   public static StateElection parseStateElection(String line,
       ArrayList<Candidate> candidates)
   {
+    HashMap.Entry<Candidate, Integer> max;
     StateElection result;
     String abbreviation;
     String[] split;
@@ -80,8 +75,7 @@ public class StateElection
       }
       else
       {
-        result = new StateElection(abbreviation,
-            Integer.parseInt(split[i++]));
+        result = new StateElection(abbreviation, Integer.parseInt(split[i++]));
       }
 
       result.parseVotes(split, i, candidates);
@@ -91,6 +85,17 @@ public class StateElection
       throw new IllegalArgumentException(
           "malformed state entry: " + e.toString());
     }
+
+    max = null;
+
+    for (HashMap.Entry<Candidate, Integer> state : result.results.entrySet())
+    {
+      if (max == null || state.getValue() > max.getValue())
+        max = state;
+    }
+
+    result.winner = max.getKey();
+    result.winner.addElectoralVotes(result.electoralVotes);
 
     return result;
   }

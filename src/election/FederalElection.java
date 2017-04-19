@@ -44,14 +44,6 @@ public class FederalElection
     listeners.add(l);
   }
 
-  public void countVotes()
-  {
-    for (StateElection se : states)
-    {
-      se.assignVotes();
-    }
-  }
-
   /**
    * @return the list of candidates
    */

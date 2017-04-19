@@ -27,17 +27,17 @@ import visual.statik.sampled.ContentFactory;
 public class ResultPanel extends JPanel
 {
   FederalElection election;
-  File dir;
+  File dataDir;
   ContentFactory cf;
   Visualization visualization;
 
-  public ResultPanel(FederalElection election, File dir, ResourceFinder rf)
+  public ResultPanel(FederalElection election, File dataDir, ResourceFinder rf)
       throws IOException
   {
     super(null);
 
     this.election = election;
-    this.dir = dir;
+    this.dataDir = dataDir;
     this.cf = new ContentFactory(rf);
 
     int numCands;
@@ -104,14 +104,14 @@ public class ResultPanel extends JPanel
         size.height);
 
     // TODO placeholder images
-    if (dir.isAbsolute())
+    if (dataDir.isAbsolute())
     {
-      c = cf.createContent(ImageIO.read(new File(dir, i + ".jpg")));
+      c = cf.createContent(ImageIO.read(new File(dataDir, i + ".jpg")));
     }
     else
     {
       c = cf.createContent(
-          File.separator + dir.toString() + File.separator + i + ".jpg");
+          File.separator + dataDir.getPath() + File.separator + i + ".jpg");
     }
 
     c.setLocation(x, 100);
