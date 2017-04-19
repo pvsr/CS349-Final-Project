@@ -49,7 +49,7 @@ public class FinalProjectApp extends AbstractMultimediaApp
 
     election = ElectionFactory.createFederalElection(in);
     election.countVotes();
-    tabbedPane.addTab(election.getTitle(), buildResultTab(election, dir));
+    tabbedPane.addTab(election.getTitle(), new ResultPanel(election, dir, rf));
     elections.add(election);
   }
 
@@ -74,83 +74,6 @@ public class FinalProjectApp extends AbstractMultimediaApp
     help.add(copyright);
 
     return menuBar;
-  }
-
-  private JPanel buildResultTab(FederalElection election, File dir)
-      throws IOException
-  {
-    Candidate cand;
-    Content c;
-    ContentFactory cf;
-    Dimension size;
-    int numCands, x, y;
-    JPanel result;
-    Visualization visualization;
-    VisualizationView view;
-
-    numCands = election.getCandidates().size();
-    cf = new ContentFactory(rf);
-    visualization = new Visualization();
-    result = new JPanel(null);
-
-    view = visualization.getView();
-    view.setBounds(0, 0, 700, 500);
-
-    for (int i = 0; i < numCands; i++)
-    {
-      JLabel label;
-      JProgressBar popular;
-      JProgressBar electoral;
-      x = i % 2 == 0 ? 130 : 490;
-      // TODO deal with more than two cands
-      y = 100;
-
-      cand = election.getCandidates().get(i);
-
-      label = new JLabel(cand.toString());
-      result.add(label);
-      size = label.getPreferredSize();
-      label.setBounds(x + 90 - size.width / 2, y - 35, size.width, size.height);
-      label.setHorizontalAlignment(JLabel.CENTER);
-
-      popular = new JProgressBar(0, election.getTotalVotes());
-      popular.setForeground(cand.getParty().getColor());
-      popular.setValue(cand.getVotes());
-      popular.setString(cand.getVotes() + " votes");
-      popular.setStringPainted(true);
-      result.add(popular);
-      size = popular.getPreferredSize();
-      popular.setBounds(x + 90 - size.width / 2, y + 260, size.width,
-          size.height);
-
-      electoral = new JProgressBar(0, election.getTotalElectoralVotes());
-      electoral.setForeground(cand.getParty().getColor());
-      electoral.setValue(cand.getElectoralVotes());
-      electoral.setString(cand.getElectoralVotes() + " electoral votes");
-      electoral.setStringPainted(true);
-      result.add(electoral);
-      size = electoral.getPreferredSize();
-      electoral.setBounds(x + 90 - size.width / 2, y + 280, size.width,
-          size.height);
-
-      // TODO placeholder images
-      if (dir.isAbsolute())
-      {
-        c = cf.createContent(ImageIO.read(new File(dir, i + ".jpg")));
-      }
-      else
-      {
-        c = cf.createContent(
-            File.separator + dir.toString() + File.separator + i + ".jpg");
-      }
-
-      c.setLocation(x, 100);
-      visualization.add(c);
-    }
-
-    result.add(view);
-    result.repaint();
-    return result;
   }
 
   @Override
