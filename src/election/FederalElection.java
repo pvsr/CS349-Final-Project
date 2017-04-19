@@ -13,6 +13,7 @@ public class FederalElection
 {
   private ArrayList<Candidate> cands;
   private ArrayList<StateElection> states;
+  private ArrayList<ElectionListener> listeners;
   private String title;
   private int totalVotes;
   private int totalElectoralVotes;
@@ -21,6 +22,7 @@ public class FederalElection
   {
     cands = new ArrayList<Candidate>();
     states = new ArrayList<StateElection>();
+    listeners = new ArrayList<ElectionListener>();
   }
 
   public void addCandidate(Candidate candidate)
@@ -30,7 +32,16 @@ public class FederalElection
 
   public void addState(StateElection state)
   {
+    for (ElectionListener l : listeners)
+    {
+      l.handleState(state);
+    }
     states.add(state);
+  }
+
+  public void addStateListener(ElectionListener l)
+  {
+    listeners.add(l);
   }
 
   public void countVotes()

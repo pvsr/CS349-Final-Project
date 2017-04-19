@@ -11,6 +11,7 @@ import visual.statik.sampled.Content;
 import visual.statik.sampled.ContentFactory;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -35,6 +36,7 @@ public class FinalProjectApp extends AbstractMultimediaApp
     implements ActionListener
 {
   private static final String DATA_PATH = "data" + File.separator;
+  private static final String RESOURCE_PATH = "resources" + File.separator;
   private static JFileChooser fc = null;
 
   private ArrayList<FederalElection> elections;
@@ -156,6 +158,7 @@ public class FinalProjectApp extends AbstractMultimediaApp
   {
     Container parent;
     JPanel contentPane;
+    MapPanel map;
 
     contentPane = (JPanel) rootPaneContainer.getContentPane();
     contentPane.setLayout(new BorderLayout());
@@ -164,6 +167,7 @@ public class FinalProjectApp extends AbstractMultimediaApp
     contentPane.add(tabbedPane, BorderLayout.CENTER);
 
     rf = ResourceFinder.createInstance();
+    map = new MapPanel(rf, RESOURCE_PATH);
 
     elections = new ArrayList<FederalElection>();
 
@@ -198,6 +202,8 @@ public class FinalProjectApp extends AbstractMultimediaApp
           JOptionPane.ERROR_MESSAGE);
       destroy();
     }
+
+    tabbedPane.add("Map", new MapPanel(rf, RESOURCE_PATH));
 
     tabbedPane.setSize(tabbedPane.getPreferredSize());
     contentPane.setVisible(true);
