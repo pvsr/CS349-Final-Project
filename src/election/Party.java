@@ -12,7 +12,10 @@ import java.awt.Color;
 public enum Party
 {
   Democratic("D", "Democratic", "Democratic Party", Color.BLUE),
-  Republican("R", "Republican", "Republican Party", Color.RED);
+  Republican("R", "Republican", "Republican Party", Color.RED),
+  Progressive("P", "Progressive", "Progressive Party", Color.GREEN),
+  Socialist("S", "Socialist", "Socialist Party", new Color(0x79, 0, 0)),
+  Independent("I", "Independent", "Independent", Color.LIGHT_GRAY);
 
   private String abbreviation;
   private String adjective;

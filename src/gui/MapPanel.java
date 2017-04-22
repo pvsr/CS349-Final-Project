@@ -26,7 +26,6 @@ public class MapPanel extends JPanel
   {
     super();
 
-    // setBackground(Color.WHITE);
     Content map, c;
     ContentFactory cf = new ContentFactory(rf);
     Visualization v;
@@ -38,6 +37,7 @@ public class MapPanel extends JPanel
 
     for (StateElection state : election.getStates())
     {
+
       c = cf.createContent(statesDir + "states" + File.separator
           + state.getState().getAbbreviation() + ".png", 4);
       c.setBufferedImageOp(

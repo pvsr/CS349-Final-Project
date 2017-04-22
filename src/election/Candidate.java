@@ -95,7 +95,7 @@ public class Candidate
   @Override
   public String toString()
   {
-    return "<html>" + presCand + " / " + vicePresCand + "<br><center>" + party.getName() + "</center></html>";
+    return "<html><center>" + presCand + "<br>" + vicePresCand + "<br>" + party.getName() + "</center></html>";
   }
 
 }

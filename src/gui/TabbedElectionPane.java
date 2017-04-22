@@ -42,9 +42,9 @@ public class TabbedElectionPane extends JTabbedPane
     election = ElectionFactory
         .createFederalElection(findResource("president.csv"));
 
-    addTab("Results", new ResultPanel(election, dataDir, rf));
-    add("Map", new MapPanel(election, RESOURCE_PATH, rf));
     findQuote();
+    addTab("Results", new ResultPanel(election, dataDir, rf, clip != null));
+    add("Map", new MapPanel(election, RESOURCE_PATH, rf));
     if (clip != null)
       clip.start();
   }

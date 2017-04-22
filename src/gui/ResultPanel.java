@@ -32,8 +32,8 @@ public class ResultPanel extends JPanel
   ContentFactory cf;
   Visualization visualization;
 
-  public ResultPanel(FederalElection election, File dataDir, ResourceFinder rf)
-      throws IOException
+  public ResultPanel(FederalElection election, File dataDir, ResourceFinder rf,
+      boolean quote) throws IOException
   {
     super(null);
 
@@ -42,6 +42,8 @@ public class ResultPanel extends JPanel
     this.cf = new ContentFactory(rf);
 
     int numCands;
+    Dimension size;
+    JButton playButton;
     VisualizationView view;
 
     numCands = election.getCandidates().size();
@@ -51,9 +53,18 @@ public class ResultPanel extends JPanel
     view = visualization.getView();
     view.setBounds(0, 0, 800, 600);
 
+    // play button
+    if (quote)
+    {
+      playButton = new JButton("Replay quote");
+      add(playButton);
+      size = playButton.getPreferredSize();
+      playButton.setBounds(400 - size.width / 2, 10, size.width, size.height);
+    }
+
     for (int i = 0; i < numCands; i++)
     {
-      int sectionWidth = 780 / (numCands);
+      int sectionWidth = 795 / (numCands);
       // assuming img width is 180, center candidate in their section
       // works well for 2-4 candidates
       addCandidate(i, (sectionWidth / 2 - 90) + sectionWidth * i);
@@ -69,11 +80,10 @@ public class ResultPanel extends JPanel
     Content c;
     Dimension size;
     int y;
-    JButton playButton;
     JLabel label;
     JProgressBar popular;
     JProgressBar electoral;
-    
+
     y = 100;
 
     cand = election.getCandidates().get(i);
@@ -81,14 +91,8 @@ public class ResultPanel extends JPanel
     label = new JLabel(cand.toString());
     add(label);
     size = label.getPreferredSize();
-    label.setBounds(x + 90 - size.width / 2, y - 35, size.width, size.height);
+    label.setBounds(x + 90 - size.width / 2, y - 50, size.width, size.height);
     label.setHorizontalAlignment(JLabel.CENTER);
-    
-    // play button
-    playButton = new JButton("Replay quote");
-    add(playButton);
-    size = playButton.getPreferredSize();
-    playButton.setBounds(400 - size.width / 2, y - 100, size.width, size.height);
 
     // popular vote bar
     popular = new JProgressBar(0, election.getTotalVotes());
@@ -121,8 +125,7 @@ public class ResultPanel extends JPanel
     }
     else
     {
-      c = cf.createContent(
-          dataDir.getPath() + File.separator + i + ".jpg");
+      c = cf.createContent(dataDir.getPath() + File.separator + i + ".jpg");
     }
 
     c.setLocation(x, y);
