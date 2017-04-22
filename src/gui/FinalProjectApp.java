@@ -5,10 +5,7 @@ import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 
 import javax.swing.JApplet;
 import javax.swing.JFileChooser;
@@ -21,8 +18,6 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import app.AbstractMultimediaApp;
-import election.ElectionFactory;
-import election.FederalElection;
 import io.ResourceFinder;
 
 /**
@@ -36,24 +31,10 @@ public class FinalProjectApp extends AbstractMultimediaApp
     implements ActionListener
 {
   private static final String DATA_PATH = ".." + File.separator + "data" + File.separator;
-  private static final String RESOURCE_PATH = ".." + File.separator + "resources" + File.separator;
   private static JFileChooser fc = null;
 
-  private ArrayList<FederalElection> elections;
   private ResourceFinder rf;
   private JTabbedPane tabbedPane;
-
-  private void addNewElection(InputStream in, File dataDir) throws IOException
-  {
-    FederalElection election;
-
-    election = ElectionFactory.createFederalElection(in);
-    tabbedPane.addTab(election.getTitle(),
-        new ResultPanel(election, dataDir, rf));
-    tabbedPane.add("Map", new MapPanel(election, RESOURCE_PATH, rf));
-
-    elections.add(election);
-  }
 
   public JMenuBar buildJMenuBar()
   {
@@ -92,8 +73,6 @@ public class FinalProjectApp extends AbstractMultimediaApp
 
     rf = ResourceFinder.createInstance();
 
-    elections = new ArrayList<FederalElection>();
-
     // terrible hack to add a menubar
     parent = contentPane;
     do
@@ -114,10 +93,7 @@ public class FinalProjectApp extends AbstractMultimediaApp
 
     try
     {
-      addNewElection(
-          rf.findInputStream(DATA_PATH + "2008"
-              + File.separator + "president.csv"),
-          new File(DATA_PATH + "2008"));
+      tabbedPane.add("2008", new TabbedElectionPane(rf, new File(DATA_PATH + "2008")));
     }
     catch (IOException e)
     {
@@ -158,13 +134,14 @@ public class FinalProjectApp extends AbstractMultimediaApp
 
         try
         {
-          addNewElection(new FileInputStream(file), file.getParentFile());
+          tabbedPane.add(file.getParentFile().getName(), new TabbedElectionPane(rf, file.getParentFile()));
         }
         catch (IOException exception)
         {
           // TODO execute this on the event dispatch thread
           JOptionPane.showMessageDialog(contentPane, exception.toString(),
               "Error!", JOptionPane.ERROR_MESSAGE);
+          exception.printStackTrace();
         }
       }
     }

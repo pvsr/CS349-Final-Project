@@ -38,10 +38,10 @@ public class MapPanel extends JPanel
 
     for (StateElection state : election.getStates())
     {
-      c = cf.createContent(File.separator + statesDir + "states"
-          + File.separator + state.getState().getAbbreviation() + ".png", 4);
+      c = cf.createContent(statesDir + "states" + File.separator
+          + state.getState().getAbbreviation() + ".png", 4);
       c.setBufferedImageOp(
-          new ColorFilterOp(state.getWinner().getParty().getColor()));
+          ColorFilterOpFactory.getOp(state.getWinner().getParty().getColor()));
       v.add(c);
     }
 

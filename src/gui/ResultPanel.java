@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -48,29 +49,31 @@ public class ResultPanel extends JPanel
     visualization = new Visualization();
 
     view = visualization.getView();
-    view.setBounds(0, 0, 700, 500);
+    view.setBounds(0, 0, 800, 600);
 
     for (int i = 0; i < numCands; i++)
     {
-      addCandidate(i);
+      int sectionWidth = 780 / (numCands);
+      // assuming img width is 180, center candidate in their section
+      // works well for 2-4 candidates
+      addCandidate(i, (sectionWidth / 2 - 90) + sectionWidth * i);
     }
 
     add(view);
     repaint();
   }
 
-  private void addCandidate(int i) throws IOException
+  private void addCandidate(int i, int x) throws IOException
   {
     Candidate cand;
     Content c;
     Dimension size;
-    int x, y;
+    int y;
+    JButton playButton;
     JLabel label;
     JProgressBar popular;
     JProgressBar electoral;
-
-    x = i % 2 == 0 ? 130 : 490;
-    // TODO deal with more than two cands
+    
     y = 100;
 
     cand = election.getCandidates().get(i);
@@ -80,6 +83,12 @@ public class ResultPanel extends JPanel
     size = label.getPreferredSize();
     label.setBounds(x + 90 - size.width / 2, y - 35, size.width, size.height);
     label.setHorizontalAlignment(JLabel.CENTER);
+    
+    // play button
+    playButton = new JButton("Replay quote");
+    add(playButton);
+    size = playButton.getPreferredSize();
+    playButton.setBounds(400 - size.width / 2, y - 100, size.width, size.height);
 
     // popular vote bar
     popular = new JProgressBar(0, election.getTotalVotes());
@@ -89,7 +98,8 @@ public class ResultPanel extends JPanel
     popular.setStringPainted(true);
     add(popular);
     size = popular.getPreferredSize();
-    popular.setBounds(x + 90 - size.width / 2, y + 260, size.width,
+    size.setSize(size.width + 25, size.height + 15);
+    popular.setBounds(x + 90 - size.width / 2, y + 270, size.width,
         size.height);
 
     // electoral vote bar
@@ -100,7 +110,8 @@ public class ResultPanel extends JPanel
     electoral.setStringPainted(true);
     add(electoral);
     size = electoral.getPreferredSize();
-    electoral.setBounds(x + 90 - size.width / 2, y + 280, size.width,
+    size.setSize(size.width + 25, size.height + 15);
+    electoral.setBounds(x + 90 - size.width / 2, y + 310, size.width,
         size.height);
 
     // TODO placeholder images
@@ -114,7 +125,7 @@ public class ResultPanel extends JPanel
           dataDir.getPath() + File.separator + i + ".jpg");
     }
 
-    c.setLocation(x, 100);
+    c.setLocation(x, y);
     visualization.add(c);
   }
 }
