@@ -111,7 +111,7 @@ public class ResultPanel extends JPanel
     else
     {
       c = cf.createContent(
-          File.separator + dataDir.getPath() + File.separator + i + ".jpg");
+          dataDir.getPath() + File.separator + i + ".jpg");
     }
 
     c.setLocation(x, 100);

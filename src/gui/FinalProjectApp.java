@@ -35,8 +35,8 @@ import io.ResourceFinder;
 public class FinalProjectApp extends AbstractMultimediaApp
     implements ActionListener
 {
-  private static final String DATA_PATH = "data" + File.separator;
-  private static final String RESOURCE_PATH = "resources" + File.separator;
+  private static final String DATA_PATH = ".." + File.separator + "data" + File.separator;
+  private static final String RESOURCE_PATH = ".." + File.separator + "resources" + File.separator;
   private static JFileChooser fc = null;
 
   private ArrayList<FederalElection> elections;
@@ -115,7 +115,7 @@ public class FinalProjectApp extends AbstractMultimediaApp
     try
     {
       addNewElection(
-          rf.findInputStream(File.separator + DATA_PATH + "2008"
+          rf.findInputStream(DATA_PATH + "2008"
               + File.separator + "president.csv"),
           new File(DATA_PATH + "2008"));
     }
