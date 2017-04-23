@@ -13,7 +13,7 @@ import visual.statik.sampled.Content;
 import visual.statik.sampled.ContentFactory;
 
 /**
- *
+ * A panel that contains a map with color-coded results.
  *
  * @author Peter Rice (ricepv)
  * This work complies with the JMU Honor Code.
@@ -22,22 +22,27 @@ import visual.statik.sampled.ContentFactory;
 public class MapPanel extends JPanel
 {
 
+  /**
+   * Explicit value constructor.
+   * 
+   * @param election The election to show
+   * @param statesDir The directory that contains state images
+   * @param rf A ResourceFinder
+   */
   public MapPanel(FederalElection election, String statesDir, ResourceFinder rf)
   {
     super();
 
-    Content map, c;
+    Content c;
     ContentFactory cf = new ContentFactory(rf);
     Visualization v;
 
-    map = cf.createContent(
-        File.separator + statesDir + File.separator + "states.png", 4);
     v = new Visualization();
-    v.add(map);
 
+    // each state is stored as a separate image. It's inefficient, but simple
+    // and allows states that didn't exist at the time be excluded
     for (StateElection state : election.getStates())
     {
-
       c = cf.createContent(statesDir + "states" + File.separator
           + state.getState().getAbbreviation() + ".png", 4);
       c.setBufferedImageOp(

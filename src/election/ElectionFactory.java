@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 /**
- *
+ * A factory that builds FederalElections.
  *
  * @author Peter Rice (ricepv)
  * This work complies with the JMU Honor Code.
@@ -14,7 +14,15 @@ import java.io.InputStreamReader;
  */
 public class ElectionFactory
 {
-  public static FederalElection createFederalElection(InputStream in) throws IOException
+  /**
+   * Explicit value constructor.
+   * 
+   * @param in The location of the input file.
+   * @return The new FederalElection.
+   * @throws IOException
+   */
+  public static FederalElection createFederalElection(InputStream in)
+      throws IOException
   {
     BufferedReader reader;
     InputStreamReader isr;
@@ -29,7 +37,9 @@ public class ElectionFactory
     isr = new InputStreamReader(in);
     reader = new BufferedReader(isr);
 
-    result.setTitle(reader.readLine());
+    // use only the first entry of the line
+    result.setTitle(reader.readLine().split(",")[0]);
+
     // skip header
     reader.readLine();
     line = reader.readLine();
@@ -40,11 +50,13 @@ public class ElectionFactory
       line = reader.readLine();
     }
 
+    // skip header
     line = reader.readLine();
 
     while (line != null && !line.startsWith("Totals"))
     {
-      result.addState(StateElection.parseStateElection(line, result.getCandidates()));
+      result.addState(
+          StateElection.parseStateElection(line, result.getCandidates()));
       line = reader.readLine();
     }
 

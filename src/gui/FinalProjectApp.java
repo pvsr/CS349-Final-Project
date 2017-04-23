@@ -16,12 +16,13 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 
 import app.AbstractMultimediaApp;
 import io.ResourceFinder;
 
 /**
- *
+ * The main program logic.
  *
  * @author Peter Rice (ricepv)
  * This work complies with the JMU Honor Code.
@@ -30,12 +31,18 @@ import io.ResourceFinder;
 public class FinalProjectApp extends AbstractMultimediaApp
     implements ActionListener
 {
-  private static final String DATA_PATH = ".." + File.separator + "data" + File.separator;
+  private static final String DATA_PATH = ".." + File.separator + "data"
+      + File.separator;
   private static JFileChooser fc = null;
 
   private ResourceFinder rf;
   private JTabbedPane tabbedPane;
 
+  /**
+   * Construct a JMenuBar.
+   * 
+   * @return The menu bar
+   */
   public JMenuBar buildJMenuBar()
   {
     JMenuBar menuBar;
@@ -73,7 +80,9 @@ public class FinalProjectApp extends AbstractMultimediaApp
 
     rf = ResourceFinder.createInstance();
 
-    // terrible hack to add a menubar
+    // hack to add a menubar. The JFrame or JApplet isn't conveniently
+    // accessible through the multimedia.jar framework, so I instead go up the
+    // component hierarchy until I find a place to add the menu bar
     parent = contentPane;
     do
     {
@@ -93,7 +102,9 @@ public class FinalProjectApp extends AbstractMultimediaApp
 
     try
     {
-      tabbedPane.add("2008", new TabbedElectionPane(rf, new File(DATA_PATH + "2008")));
+      // add 2008 by default
+      tabbedPane.add("2008",
+          new TabbedElectionPane(rf, new File(DATA_PATH + "2008")));
     }
     catch (IOException e)
     {
@@ -112,12 +123,6 @@ public class FinalProjectApp extends AbstractMultimediaApp
     System.exit(1);
   }
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see
-   * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-   */
   @Override
   public void actionPerformed(ActionEvent e)
   {
@@ -134,11 +139,11 @@ public class FinalProjectApp extends AbstractMultimediaApp
 
         try
         {
-          tabbedPane.add(file.getParentFile().getName(), new TabbedElectionPane(rf, file.getParentFile()));
+          tabbedPane.add(file.getParentFile().getName(),
+              new TabbedElectionPane(rf, file.getParentFile()));
         }
         catch (IOException exception)
         {
-          // TODO execute this on the event dispatch thread
           JOptionPane.showMessageDialog(contentPane, exception.toString(),
               "Error!", JOptionPane.ERROR_MESSAGE);
           exception.printStackTrace();

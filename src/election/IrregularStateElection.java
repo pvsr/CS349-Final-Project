@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- *
+ * A state election that does not distribute all electoral votes to the
+ * plurality vote winner.
  *
  * @author Peter Rice (ricepv)
  * This work complies with the JMU Honor Code.
@@ -15,8 +16,10 @@ public class IrregularStateElection extends StateElection
   private HashMap<Candidate, Integer> evResults;
 
   /**
-   * @param abbreviation
-   * @param electoralVotes
+   * Explicit value constructor.
+   * 
+   * @param abbreviation The state's abbreviation.
+   * @param electoralVotes The state's number of electoral votes.
    */
   public IrregularStateElection(String abbreviation, int electoralVotes)
   {
@@ -24,13 +27,8 @@ public class IrregularStateElection extends StateElection
     evResults = new HashMap<Candidate, Integer>();
   }
 
-  public void addElectoralVoteResult(Candidate cand, Integer eVotes)
-  {
-    evResults.put(cand, eVotes);
-  }
-
   /**
-   * Assign the state's electoral votes
+   * Assign the state's electoral votes to candidates.
    */
   public void assignVotes()
   {
@@ -38,17 +36,19 @@ public class IrregularStateElection extends StateElection
       result.getKey().addElectoralVotes(result.getValue());
   }
 
-  @Override void parseVotes(String[] split, int offset, ArrayList<Candidate> candidates)
+  @Override
+  void parseVotes(String[] split, int offset, ArrayList<Candidate> candidates)
   {
     String[] votes;
 
     for (int i = 0; i < candidates.size(); i++)
     {
+      // handle special notation for non-winner-take-all states
       votes = split[i + offset].split("\\|");
       if (votes.length != 2)
         throw new IllegalArgumentException("malformed vote line");
       addVoteResult(candidates.get(i), Integer.parseInt(votes[0]));
-      addElectoralVoteResult(candidates.get(i), Integer.parseInt(votes[1]));
+      evResults.put(candidates.get(i), Integer.parseInt(votes[1]));
     }
   }
 }

@@ -19,7 +19,7 @@ import election.FederalElection;
 import io.ResourceFinder;
 
 /**
- *
+ * A tabbed pane containing other panels related to the same election.
  *
  * @author Peter Rice (ricepv)
  * This work complies with the JMU Honor Code.
@@ -35,6 +35,13 @@ public class TabbedElectionPane extends JTabbedPane
   private File dataDir;
   private ResourceFinder rf;
 
+  /**
+   * Explicit value constructor.
+   * 
+   * @param rf A ResourceFinder
+   * @param dataDir The directory that contains images and audio
+   * @throws IOException
+   */
   public TabbedElectionPane(ResourceFinder rf, File dataDir) throws IOException
   {
     this.dataDir = dataDir;
@@ -49,6 +56,13 @@ public class TabbedElectionPane extends JTabbedPane
       clip.start();
   }
 
+  /**
+   * Find a resource, handling external and internal files.
+   * 
+   * @param name The filename
+   * @return An InputStream of the resource
+   * @throws FileNotFoundException
+   */
   private InputStream findResource(String name) throws FileNotFoundException
   {
     InputStream result;
@@ -64,12 +78,17 @@ public class TabbedElectionPane extends JTabbedPane
     if (result == null)
     {
       throw new FileNotFoundException(
-          dataDir + File.separator + name + "not found");
+          dataDir + File.separator + name + " not found");
     }
     else
       return result;
   }
 
+  /**
+   * Find a quote audio file, if there is one.
+   * 
+   * @throws IOException
+   */
   private void findQuote() throws IOException
   {
     InputStream is;
@@ -101,7 +120,9 @@ public class TabbedElectionPane extends JTabbedPane
   }
 
   /**
-   * @return the election
+   * Getter for election.
+   * 
+   * @return The election
    */
   public FederalElection getElection()
   {

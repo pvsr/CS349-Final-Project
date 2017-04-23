@@ -5,7 +5,7 @@ import app.MultimediaApplication;
 import javax.swing.*;
 
 /**
- *
+ * Application version of the program.
  *
  * @author Peter Rice (ricepv)
  * This work complies with the JMU Honor Code.

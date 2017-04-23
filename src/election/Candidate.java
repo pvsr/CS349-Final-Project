@@ -1,7 +1,7 @@
 package election;
 
 /**
- *
+ * A presidential election candidate.
  *
  * @author Peter Rice (ricepv)
  * This work complies with the JMU Honor Code.
@@ -15,6 +15,13 @@ public class Candidate
   private int votes;
   private int electoralVotes;
 
+  /**
+   * Explicit value constructor.
+   * 
+   * @param party The candidate's party (independent counts as a party)
+   * @param presCand The presidential candidate's name
+   * @param vicePresCand The vice-presidential candidate's name
+   */
   public Candidate(Party party, String presCand, String vicePresCand)
   {
     this.party = party;
@@ -25,13 +32,20 @@ public class Candidate
     electoralVotes = 0;
   }
 
-  public void addElectoralVotes(int votes)
+  /**
+   * Add electoral votes to the candidate's total.
+   * 
+   * @param newVotes The number of new votes
+   */
+  public void addElectoralVotes(int newVotes)
   {
-    electoralVotes += votes;
+    electoralVotes += newVotes;
   }
 
   /**
-   * @return the number of electoral votes
+   * Getter for electoralVotes.
+   * 
+   * @return The number of electoral votes
    */
   public int getElectoralVotes()
   {
@@ -39,7 +53,9 @@ public class Candidate
   }
 
   /**
-   * @return the candidate's party
+   * Getter for party.
+   * 
+   * @return The candidate's party
    */
   public Party getParty()
   {
@@ -47,7 +63,9 @@ public class Candidate
   }
 
   /**
-   * @return the presidential candidate's name
+   * Getter for presCand.
+   * 
+   * @return The presidential candidate's name
    */
   public String getPresCand()
   {
@@ -55,7 +73,9 @@ public class Candidate
   }
 
   /**
-   * @return the vice presidential candidate's name
+   * Getter for vicePresCand.
+   * 
+   * @return The vice presidential candidate's name
    */
   public String getVicePresCand()
   {
@@ -63,29 +83,40 @@ public class Candidate
   }
 
   /**
-   * @return the votes
+   * Getter for votes.
+   * 
+   * @return The number of votes
    */
   public int getVotes()
   {
     return votes;
   }
 
+  /**
+   * Parse a line from the input csv into a Candidate.
+   * 
+   * @param line The input line
+   * @return The result
+   */
   public static Candidate parseCandidate(String line)
   {
-	String[] split;
-	int i = 0;
+    String[] split;
+    int i = 0;
 
     split = line.split(",");
 
+    // expected width of the row
     if (split.length != 3)
       throw new IllegalArgumentException("malformed candidate entry");
 
-    return new Candidate(Party.fromAbbreviation(split[i++]),
-	    split[i++], split[i++]);
+    return new Candidate(Party.fromAbbreviation(split[i++]), split[i++],
+        split[i++]);
   }
 
   /**
-   * @param votes the number of votes to set
+   * Setter for votes.
+   * 
+   * @param votes The new number of votes
    */
   public void setVotes(int votes)
   {
@@ -95,7 +126,8 @@ public class Candidate
   @Override
   public String toString()
   {
-    return "<html><center>" + presCand + "<br>" + vicePresCand + "<br>" + party.getName() + "</center></html>";
+    return "<html><center>" + presCand + "<br>" + vicePresCand + "<br>"
+        + party.getName() + "</center></html>";
   }
 
 }

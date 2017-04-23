@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- *
+ * An election in one state.
  *
  * @author Peter Rice (ricepv)
  * This work complies with the JMU Honor Code.
@@ -12,16 +12,17 @@ import java.util.HashMap;
  */
 public class StateElection
 {
-  private State state;
-  private int electoralVotes;
-
-  private HashMap<Candidate, Integer> results;
+  private boolean assigned;
   private Candidate winner;
+  private int electoralVotes;
+  private HashMap<Candidate, Integer> results;
+  private State state;
 
   /**
-   * @param votes
-   * @param evResults
-   * @param electoralVotes
+   * Explicit value constructor.
+   * 
+   * @param abbreviation The abbreviation of the state
+   * @param electoralVotes The number of electoral votes at stake
    */
   public StateElection(String abbreviation, int electoralVotes)
   {
@@ -29,15 +30,49 @@ public class StateElection
     this.electoralVotes = electoralVotes;
 
     results = new HashMap<Candidate, Integer>();
+    assigned = false;
   }
 
+  /**
+   * Add a record of votes for a candidate.
+   * 
+   * @param cand The candidate
+   * @param votes The number of votes
+   */
   public void addVoteResult(Candidate cand, Integer votes)
   {
     results.put(cand, votes);
   }
 
   /**
-   * @return the winner
+   * Calculate a winner and assign the state's electoral votes.
+   */
+  public void calculateWinner()
+  {
+    HashMap.Entry<Candidate, Integer> max;
+
+    max = null;
+
+    // if votes were previously assigned, unassign them
+    if (assigned)
+    {
+      winner.addElectoralVotes(-1 * electoralVotes);
+    }
+
+    for (HashMap.Entry<Candidate, Integer> entry : results.entrySet())
+    {
+      if (max == null || entry.getValue() > max.getValue())
+        max = entry;
+    }
+
+    winner = max.getKey();
+    winner.addElectoralVotes(electoralVotes);
+  }
+
+  /**
+   * Getter for winner.
+   * 
+   * @return The winner
    */
   public Candidate getWinner()
   {
@@ -45,23 +80,32 @@ public class StateElection
   }
 
   /**
-   * @return the state
+   * Getter for state.
+   * 
+   * @return The state
    */
   public State getState()
   {
     return state;
   }
 
+  /**
+   * Parse a line from the input csv into a StateElection.
+   * 
+   * @param line The input line
+   * @param candidates The candidates running
+   * @return The result
+   */
   public static StateElection parseStateElection(String line,
       ArrayList<Candidate> candidates)
   {
-    HashMap.Entry<Candidate, Integer> max;
     StateElection result;
     String abbreviation;
     String[] split;
     int i = 0;
 
     split = line.split(",");
+    // expected width of the row
     if (split.length != 3 + candidates.size())
       throw new IllegalArgumentException("malformed vote line: " + line);
 
@@ -86,23 +130,21 @@ public class StateElection
           "malformed state entry: " + e.toString());
     }
 
-    max = null;
-
-    for (HashMap.Entry<Candidate, Integer> state : result.results.entrySet())
-    {
-      if (max == null || state.getValue() > max.getValue())
-        max = state;
-    }
-
-    result.winner = max.getKey();
-    result.winner.addElectoralVotes(result.electoralVotes);
+    result.calculateWinner();
 
     return result;
   }
 
+  /**
+   * Parse a row of votes into the results. Exists so child classes can parse
+   * votes differently.
+   * 
+   * @param split The vote numbers, in the same order as candidates
+   * @param offset The offset into the row where votes start
+   * @param candidates The list of candidates
+   */
   void parseVotes(String[] split, int offset, ArrayList<Candidate> candidates)
   {
-
     for (int i = 0; i < candidates.size(); i++)
     {
       addVoteResult(candidates.get(i), Integer.parseInt(split[i + offset]));

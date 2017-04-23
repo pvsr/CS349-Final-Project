@@ -1,7 +1,7 @@
 package election;
 
 /**
- *
+ * An enum of US states, and D.C.
  *
  * @author Peter Rice (ricepv)
  * This work complies with the JMU Honor Code.
@@ -64,23 +64,42 @@ public enum State
   private String abbreviation;
   private String name;
 
-  private State(String abbreviation, String name) {
+  /**
+   * Explicit value constructor.
+   * 
+   * @param abbreviation The state's two-letter abbreviation
+   * @param name The state's name.
+   */
+  private State(String abbreviation, String name)
+  {
     this.abbreviation = abbreviation;
     this.name = name;
   }
 
-  public static State fromAbbreviation(String abbreviation) {
-    for (State state : State.values()) {
-      if (abbreviation.equals(state.abbreviation)) {
+  /**
+   * Parse a State from an abbreviation.
+   * 
+   * @param abbreviation The input abbreviation
+   * @return The corresponding state
+   */
+  public static State fromAbbreviation(String abbreviation)
+  {
+    for (State state : State.values())
+    {
+      if (abbreviation.equals(state.abbreviation))
+      {
         return state;
       }
     }
 
-    throw new IllegalArgumentException("unknown state abbreviation: " + abbreviation);
+    throw new IllegalArgumentException(
+        "unknown state abbreviation: " + abbreviation);
   }
 
   /**
-   * @return the abbreviation
+   * Getter for abbreviation.
+   * 
+   * @return The abbreviation
    */
   public String getAbbreviation()
   {
@@ -88,7 +107,9 @@ public enum State
   }
 
   /**
-   * @return the name
+   * Getter for name.
+   * 
+   * @return The name
    */
   public String getName()
   {

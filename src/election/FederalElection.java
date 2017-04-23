@@ -3,7 +3,7 @@ package election;
 import java.util.ArrayList;
 
 /**
- *
+ * A record of a federal election.
  *
  * @author Peter Rice (ricepv)
  * This work complies with the JMU Honor Code.
@@ -13,39 +13,43 @@ public class FederalElection
 {
   private ArrayList<Candidate> cands;
   private ArrayList<StateElection> states;
-  private ArrayList<ElectionListener> listeners;
   private String title;
   private int totalVotes;
   private int totalElectoralVotes;
 
+  /**
+   * Default constructor.
+   */
   public FederalElection()
   {
     cands = new ArrayList<Candidate>();
     states = new ArrayList<StateElection>();
-    listeners = new ArrayList<ElectionListener>();
   }
 
+  /**
+   * Add a new candidate.
+   * 
+   * @param candidate The candidate to add
+   */
   public void addCandidate(Candidate candidate)
   {
     cands.add(candidate);
   }
 
+  /**
+   * Add a new state election.
+   * 
+   * @param state The state election to add
+   */
   public void addState(StateElection state)
   {
-    for (ElectionListener l : listeners)
-    {
-      l.handleState(state);
-    }
     states.add(state);
   }
 
-  public void addStateListener(ElectionListener l)
-  {
-    listeners.add(l);
-  }
-
   /**
-   * @return the list of candidates
+   * Getter for candidates.
+   * 
+   * @return The list of candidates
    */
   public ArrayList<Candidate> getCandidates()
   {
@@ -53,19 +57,29 @@ public class FederalElection
   }
 
   /**
-   * @return the list of states
+   * Getter for states.
+   * 
+   * @return The list of state elections
    */
   public ArrayList<StateElection> getStates()
   {
     return states;
   }
 
-  public String getTitle() {
-	return title;
+  /**
+   * Getter for title.
+   * 
+   * @return The title of the election
+   */
+  public String getTitle()
+  {
+    return title;
   }
 
   /**
-   * @return the number of electoral votes
+   * Getter for totalElectoralVotes.
+   * 
+   * @return The number of electoral votes
    */
   public int getTotalElectoralVotes()
   {
@@ -73,19 +87,29 @@ public class FederalElection
   }
 
   /**
-   * @return the number of votes
+   * Getter for totalVotes.
+   * 
+   * @return The number of votes
    */
   public int getTotalVotes()
   {
     return totalVotes;
   }
 
-  public void setTitle(String title) {
-	this.title = title;
+  /**
+   * Setter for title.
+   * 
+   * @param title The new title
+   */
+  public void setTitle(String title)
+  {
+    this.title = title;
   }
 
   /**
-   * @param totalElectoralVotes the number of electoral votes
+   * Setter for totalElectoralVotes.
+   * 
+   * @param totalElectoralVotes The new number of electoral votes
    */
   public void setTotalElectoralVotes(int totalElectoralVotes)
   {
@@ -93,7 +117,9 @@ public class FederalElection
   }
 
   /**
-   * @param totalVotes the number of votes
+   * Setter for totalVotes.
+   * 
+   * @param totalVotes The new number of votes
    */
   public void setTotalVotes(int totalVotes)
   {
@@ -103,14 +129,14 @@ public class FederalElection
   @Override
   public String toString()
   {
-	  String result = title + ":\n";
+    String result = title + ":\n";
 
-	  for (Candidate c : cands)
-	  {
-		  result += c.toString() + "\n";
-	  }
+    for (Candidate c : cands)
+    {
+      result += c.toString() + "\n";
+    }
 
-	  result += states.size() + " states";
-	  return result;
+    result += states.size() + " states";
+    return result;
   }
 }

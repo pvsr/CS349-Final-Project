@@ -19,7 +19,7 @@ import visual.statik.sampled.Content;
 import visual.statik.sampled.ContentFactory;
 
 /**
- *
+ * Main election result panel.
  *
  * @author Peter Rice (ricepv)
  * This work complies with the JMU Honor Code.
@@ -32,6 +32,15 @@ public class ResultPanel extends JPanel
   ContentFactory cf;
   Visualization visualization;
 
+  /**
+   * Explicit value constructor.
+   * 
+   * @param election The election to show
+   * @param dataDir The directory that contains images and audio
+   * @param rf A ResourceFinder
+   * @param quote Whether there is a valid audio quote
+   * @throws IOException
+   */
   public ResultPanel(FederalElection election, File dataDir, ResourceFinder rf,
       boolean quote) throws IOException
   {
@@ -53,7 +62,7 @@ public class ResultPanel extends JPanel
     view = visualization.getView();
     view.setBounds(0, 0, 800, 600);
 
-    // play button
+    // only place play button if there's a quote to play
     if (quote)
     {
       playButton = new JButton("Replay quote");
@@ -64,8 +73,9 @@ public class ResultPanel extends JPanel
 
     for (int i = 0; i < numCands; i++)
     {
+      // slightly less than 800 for breathing room
       int sectionWidth = 795 / (numCands);
-      // assuming img width is 180, center candidate in their section
+      // center candidate in their section, assuming image width is 180
       // works well for 2-4 candidates
       addCandidate(i, (sectionWidth / 2 - 90) + sectionWidth * i);
     }
@@ -74,6 +84,13 @@ public class ResultPanel extends JPanel
     repaint();
   }
 
+  /**
+   * Add a candidate to the panel.
+   * 
+   * @param i The candidate's index
+   * @param x The x-value of the candidate's section
+   * @throws IOException
+   */
   private void addCandidate(int i, int x) throws IOException
   {
     Candidate cand;
@@ -118,7 +135,7 @@ public class ResultPanel extends JPanel
     electoral.setBounds(x + 90 - size.width / 2, y + 310, size.width,
         size.height);
 
-    // TODO placeholder images
+    // handle external directories separately from those in the .jar
     if (dataDir.isAbsolute())
     {
       c = cf.createContent(ImageIO.read(new File(dataDir, i + ".jpg")));
