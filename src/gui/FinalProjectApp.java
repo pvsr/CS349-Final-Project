@@ -16,7 +16,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.SwingUtilities;
 
 import app.AbstractMultimediaApp;
 import io.ResourceFinder;
@@ -31,10 +30,7 @@ import io.ResourceFinder;
 public class FinalProjectApp extends AbstractMultimediaApp
     implements ActionListener
 {
-  private static final String DATA_PATH = ".." + File.separator + "data"
-      + File.separator;
-  private static JFileChooser fc = null;
-
+  private JFileChooser fc;
   private ResourceFinder rf;
   private JTabbedPane tabbedPane;
 
@@ -78,7 +74,7 @@ public class FinalProjectApp extends AbstractMultimediaApp
     tabbedPane = new JTabbedPane();
     contentPane.add(tabbedPane, BorderLayout.CENTER);
 
-    rf = ResourceFinder.createInstance();
+    rf = ResourceFinder.createInstance(this);
 
     // hack to add a menubar. The JFrame or JApplet isn't conveniently
     // accessible through the multimedia.jar framework, so I instead go up the
@@ -100,18 +96,7 @@ public class FinalProjectApp extends AbstractMultimediaApp
       ((JFrame) parent).setJMenuBar(buildJMenuBar());
     }
 
-    try
-    {
-      // add 2008 by default
-      tabbedPane.add("2008",
-          new TabbedElectionPane(rf, new File(DATA_PATH + "2008")));
-    }
-    catch (IOException e)
-    {
-      JOptionPane.showMessageDialog(contentPane, e.toString(), "Error!",
-          JOptionPane.ERROR_MESSAGE);
-      destroy();
-    }
+    addElection(contentPane);
 
     tabbedPane.setSize(tabbedPane.getPreferredSize());
     contentPane.setVisible(true);
@@ -126,29 +111,10 @@ public class FinalProjectApp extends AbstractMultimediaApp
   @Override
   public void actionPerformed(ActionEvent e)
   {
-    if (fc == null)
-      fc = new JFileChooser();
     JPanel contentPane = (JPanel) rootPaneContainer.getContentPane();
     if (e.getActionCommand().equals("Load File"))
     {
-      File file;
-      int returnValue = fc.showOpenDialog(contentPane);
-      if (returnValue == JFileChooser.APPROVE_OPTION)
-      {
-        file = fc.getSelectedFile();
-
-        try
-        {
-          tabbedPane.add(file.getParentFile().getName(),
-              new TabbedElectionPane(rf, file.getParentFile()));
-        }
-        catch (IOException exception)
-        {
-          JOptionPane.showMessageDialog(contentPane, exception.toString(),
-              "Error!", JOptionPane.ERROR_MESSAGE);
-          exception.printStackTrace();
-        }
-      }
+      addElection(contentPane);
     }
     else if (e.getActionCommand().equals("Copyright Information"))
     {
@@ -162,6 +128,34 @@ public class FinalProjectApp extends AbstractMultimediaApp
               + "the project's website at https://github.com/pvsr/"
               + "CS349-Final-Project.</p></body></html>",
           "Copyright Information", JOptionPane.INFORMATION_MESSAGE);
+    }
+  }
+
+  /**
+   * Get a file from the user and add it to the pane.
+   *
+   * @param parent Parent component of dialogs
+   */
+  private void addElection(JPanel parent)
+  {
+    if (fc == null)
+      fc = new JFileChooser();
+    File file;
+    int returnValue = fc.showOpenDialog(parent);
+    if (returnValue == JFileChooser.APPROVE_OPTION)
+    {
+      file = fc.getSelectedFile();
+
+      try
+      {
+        tabbedPane.add(file.getParentFile().getName(),
+            new TabbedElectionPane(rf, file.getParentFile()));
+      }
+      catch (IOException exception)
+      {
+        JOptionPane.showMessageDialog(parent, exception.toString(), "Error!",
+            JOptionPane.ERROR_MESSAGE);
+      }
     }
   }
 }

@@ -26,10 +26,9 @@ public class MapPanel extends JPanel
    * Explicit value constructor.
    * 
    * @param election The election to show
-   * @param statesDir The directory that contains state images
    * @param rf A ResourceFinder
    */
-  public MapPanel(FederalElection election, String statesDir, ResourceFinder rf)
+  public MapPanel(FederalElection election, ResourceFinder rf)
   {
     super();
 
@@ -43,8 +42,7 @@ public class MapPanel extends JPanel
     // and allows states that didn't exist at the time be excluded
     for (StateElection state : election.getStates())
     {
-      c = cf.createContent(statesDir + "states" + File.separator
-          + state.getState().getAbbreviation() + ".png", 4);
+      c = cf.createContent(state.getState().getAbbreviation() + ".png", 4);
       c.setBufferedImageOp(
           ColorFilterOpFactory.getOp(state.getWinner().getParty().getColor()));
       v.add(c);

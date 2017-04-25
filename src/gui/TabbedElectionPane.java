@@ -27,9 +27,6 @@ import io.ResourceFinder;
  */
 public class TabbedElectionPane extends JTabbedPane
 {
-  private static final String RESOURCE_PATH = ".." + File.separator
-      + "resources" + File.separator;
-
   private Clip clip;
   private FederalElection election;
   private File dataDir;
@@ -51,7 +48,7 @@ public class TabbedElectionPane extends JTabbedPane
 
     findQuote();
     addTab("Results", new ResultPanel(election, dataDir, rf, clip != null));
-    add("Map", new MapPanel(election, RESOURCE_PATH, rf));
+    add("Map", new MapPanel(election, rf));
     if (clip != null)
       clip.start();
   }
