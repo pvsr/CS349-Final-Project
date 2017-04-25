@@ -27,7 +27,6 @@ import io.ResourceFinder;
  */
 public class TabbedElectionPane extends JTabbedPane
 {
-  private Clip clip;
   private FederalElection election;
   private File dataDir;
   private ResourceFinder rf;
@@ -46,11 +45,15 @@ public class TabbedElectionPane extends JTabbedPane
     election = ElectionFactory
         .createFederalElection(findResource("president.csv"));
 
-    findQuote();
-    addTab("Results", new ResultPanel(election, dataDir, rf, clip != null));
-    add("Map", new MapPanel(election, rf));
+    Clip clip = findQuote();
+    addTab("Outcome", new ResultPanel(election, dataDir, rf, clip));
+    addTab("Map", new MapPanel(election, rf));
+    addTab("Detailed results", new TablePanel(election));
     if (clip != null)
+    {
+      clip.setFramePosition(0);
       clip.start();
+    }
   }
 
   /**
@@ -84,10 +87,12 @@ public class TabbedElectionPane extends JTabbedPane
   /**
    * Find a quote audio file, if there is one.
    * 
+   * @return The clip, or null
    * @throws IOException
    */
-  private void findQuote() throws IOException
+  private Clip findQuote() throws IOException
   {
+    Clip result;
     InputStream is;
     BufferedInputStream bis;
     AudioInputStream stream;
@@ -98,22 +103,23 @@ public class TabbedElectionPane extends JTabbedPane
     }
     catch (FileNotFoundException e)
     {
-      clip = null;
-      return;
+      return null;
     }
 
     bis = new BufferedInputStream(is);
     try
     {
       stream = AudioSystem.getAudioInputStream(bis);
-      clip = AudioSystem.getClip();
-      clip.open(stream);
+      result = AudioSystem.getClip();
+      result.open(stream);
     }
     catch (UnsupportedAudioFileException | LineUnavailableException e)
     {
       e.printStackTrace();
       throw new IOException(e.getMessage());
     }
+
+    return result;
   }
 
   /**

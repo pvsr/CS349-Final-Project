@@ -1,10 +1,13 @@
 package gui;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.Clip;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -25,12 +28,13 @@ import visual.statik.sampled.ContentFactory;
  * This work complies with the JMU Honor Code.
  *
  */
-public class ResultPanel extends JPanel
+public class ResultPanel extends JPanel implements ActionListener
 {
-  FederalElection election;
-  File dataDir;
-  ContentFactory cf;
-  Visualization visualization;
+  private Clip quote;
+  private FederalElection election;
+  private File dataDir;
+  private ContentFactory cf;
+  private Visualization visualization;
 
   /**
    * Explicit value constructor.
@@ -38,17 +42,18 @@ public class ResultPanel extends JPanel
    * @param election The election to show
    * @param dataDir The directory that contains images and audio
    * @param rf A ResourceFinder
-   * @param quote Whether there is a valid audio quote
+   * @param quote An audio quote
    * @throws IOException
    */
   public ResultPanel(FederalElection election, File dataDir, ResourceFinder rf,
-      boolean quote) throws IOException
+      Clip quote) throws IOException
   {
     super(null);
 
     this.election = election;
     this.dataDir = dataDir;
     this.cf = new ContentFactory(rf);
+    this.quote = quote;
 
     int numCands;
     Dimension size;
@@ -63,12 +68,13 @@ public class ResultPanel extends JPanel
     view.setBounds(0, 0, 800, 600);
 
     // only place play button if there's a quote to play
-    if (quote)
+    if (quote != null)
     {
       playButton = new JButton("Replay quote");
       add(playButton);
       size = playButton.getPreferredSize();
       playButton.setBounds(400 - size.width / 2, 10, size.width, size.height);
+      playButton.addActionListener(this);
     }
 
     for (int i = 0; i < numCands; i++)
@@ -147,5 +153,18 @@ public class ResultPanel extends JPanel
 
     c.setLocation(x, y);
     visualization.add(c);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see
+   * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+   */
+  @Override
+  public void actionPerformed(ActionEvent e)
+  {
+    quote.setFramePosition(0);
+    quote.start();
   }
 }

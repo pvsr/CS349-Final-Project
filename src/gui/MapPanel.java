@@ -1,7 +1,6 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.io.File;
 
 import javax.swing.JPanel;
 

@@ -15,6 +15,7 @@ public class StateElection
   private boolean assigned;
   private Candidate winner;
   private int electoralVotes;
+  private int totalVotes;
   private HashMap<Candidate, Integer> results;
   private State state;
 
@@ -70,13 +71,23 @@ public class StateElection
   }
 
   /**
-   * Getter for winner.
-   * 
-   * @return The winner
+   * Getter for electoral votes.
+   *
+   * @return The number of electoral votes
    */
-  public Candidate getWinner()
+  public int getElectoralVotes()
   {
-    return winner;
+    return electoralVotes;
+  }
+
+  /**
+   * Getter for results.
+   *
+   * @return The results
+   */
+  public HashMap<Candidate, Integer> getResults()
+  {
+    return results;
   }
 
   /**
@@ -87,6 +98,25 @@ public class StateElection
   public State getState()
   {
     return state;
+  }
+
+  /**
+   * Getter for totalVotes.
+   * @return The total number of votes
+   */
+  public int getTotalVotes()
+  {
+    return totalVotes;
+  }
+
+  /**
+   * Getter for winner.
+   * 
+   * @return The winner
+   */
+  public Candidate getWinner()
+  {
+    return winner;
   }
 
   /**
@@ -123,6 +153,9 @@ public class StateElection
       }
 
       result.parseVotes(split, i, candidates);
+      
+      i+= candidates.size();
+      result.totalVotes = Integer.parseInt(split[i]);
     }
     catch (ArrayIndexOutOfBoundsException e)
     {
