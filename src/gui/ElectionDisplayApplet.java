@@ -9,10 +9,10 @@ import app.MultimediaApplet;
  * This work complies with the JMU Honor Code.
  *
  */
-public class FinalProjectApplet extends MultimediaApplet
+public class ElectionDisplayApplet extends MultimediaApplet
 {
-  public FinalProjectApplet()
+  public ElectionDisplayApplet()
   {
-    super(new FinalProjectApp());
+    super(new ElectionDisplayApp());
   }
 }

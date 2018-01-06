@@ -142,13 +142,13 @@ public class ResultPanel extends JPanel implements ActionListener
         size.height);
 
     // handle external directories separately from those in the .jar
-    if (dataDir.isAbsolute())
+    if (dataDir != null)
     {
       c = cf.createContent(ImageIO.read(new File(dataDir, i + ".jpg")));
     }
     else
     {
-      c = cf.createContent(dataDir.getPath() + File.separator + i + ".jpg");
+      c = cf.createContent(i + ".jpg");
     }
 
     c.setLocation(x, y);

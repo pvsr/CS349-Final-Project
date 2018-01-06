@@ -11,15 +11,15 @@ import javax.swing.*;
  * This work complies with the JMU Honor Code.
  *
  */
-public class FinalProjectApplication extends MultimediaApplication
+public class ElectionDisplayApplication extends MultimediaApplication
 {
-  public FinalProjectApplication(String[] args, int width, int height)
+  public ElectionDisplayApplication(String[] args, int width, int height)
   {
     super(args, new FinalProjectApp(), width, height);
   }
 
   public static void main(String[] args) throws Exception
   {
-    SwingUtilities.invokeAndWait(new FinalProjectApplication(args, 800, 600));
+    SwingUtilities.invokeAndWait(new ElectionDisplayApplication(args, 800, 600));
   }
 }

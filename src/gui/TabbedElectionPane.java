@@ -66,13 +66,13 @@ public class TabbedElectionPane extends JTabbedPane
   private InputStream findResource(String name) throws FileNotFoundException
   {
     InputStream result;
-    if (dataDir.isAbsolute())
+    if (dataDir != null)
     {
       result = new FileInputStream(new File(dataDir, name));
     }
     else
     {
-      result = rf.findInputStream(dataDir + File.separator + name);
+      result = rf.findInputStream(name);
     }
 
     if (result == null)
@@ -115,7 +115,6 @@ public class TabbedElectionPane extends JTabbedPane
     }
     catch (UnsupportedAudioFileException | LineUnavailableException e)
     {
-      e.printStackTrace();
       throw new IOException(e.getMessage());
     }
 

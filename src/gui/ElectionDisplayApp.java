@@ -27,7 +27,7 @@ import io.ResourceFinder;
  * This work complies with the JMU Honor Code.
  *
  */
-public class FinalProjectApp extends AbstractMultimediaApp
+public class ElectionDisplayApp extends AbstractMultimediaApp
     implements ActionListener
 {
   private JFileChooser fc;
@@ -96,7 +96,15 @@ public class FinalProjectApp extends AbstractMultimediaApp
       ((JFrame) parent).setJMenuBar(buildJMenuBar());
     }
 
-    addElection(contentPane);
+    try
+    {
+      tabbedPane.add("2008", new TabbedElectionPane(rf, null));
+    }
+    catch (IOException e)
+    {
+      JOptionPane.showMessageDialog(parent, e.toString(), "Error!",
+          JOptionPane.ERROR_MESSAGE);
+    }
 
     tabbedPane.setSize(tabbedPane.getPreferredSize());
     contentPane.setVisible(true);
